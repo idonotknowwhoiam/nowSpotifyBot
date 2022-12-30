@@ -38,3 +38,13 @@ export const updateAccessToken = async (
         }
     })
 }
+
+export const getUser = async (userId: string | number) => {
+    const user = await prisma.user.findUnique({
+        where: {
+            userId: userId.toString()
+        }
+    })
+
+    return user
+}
