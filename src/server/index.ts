@@ -1,6 +1,6 @@
 import { env } from '@/config'
 import { createUser } from '@/db/helpers'
-import { swapTokens } from '@/spotify/index'
+import { swapTokens } from '@/spotify/auth'
 import Fastify, { FastifyInstance, RouteShorthandOptions } from 'fastify'
 
 const server: FastifyInstance = Fastify({})
