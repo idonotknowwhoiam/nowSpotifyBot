@@ -1,4 +1,5 @@
 import { createUser } from '@/db/helpers'
+import { logger } from '@/logger'
 import { swapTokens } from '@/spotify/auth'
 import Fastify, { FastifyInstance } from 'fastify'
 
@@ -40,7 +41,7 @@ const start = async () => {
 
         const address = server.server.address()
         const port = typeof address === 'string' ? address : address?.port
-        console.log(`Server started on ${port} port`)
+        logger.info(`Server started on ${port} port`)
     } catch (err) {
         server.log.error(err)
         process.exit(1)

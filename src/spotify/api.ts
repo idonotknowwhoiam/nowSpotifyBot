@@ -1,3 +1,4 @@
+import { logger } from '@/logger'
 import { refreshToken } from '@/spotify/auth'
 import {
     ApiError,
@@ -10,7 +11,7 @@ import { User } from '@prisma/client'
 const API_URL = 'https://api.spotify.com/v1'
 
 const spotifyRequest = async <T>(url: string, user: User) => {
-    console.log(`@spotifyRequest/${url}`)
+    logger.info(`@spotifyRequest/${url}`)
 
     const responseRaw = await fetch(url, {
         method: 'GET',

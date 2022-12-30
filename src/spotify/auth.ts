@@ -1,12 +1,13 @@
 import { env } from '@/config'
 import { updateAccessToken } from '@/db/helpers'
+import { logger } from '@/logger'
 import { AuthError, Credentials, RefreshedToken } from '@/spotify/types'
 import { User } from '@prisma/client'
 
 const AUTH_URL = 'https://accounts.spotify.com/api/token'
 
 export const swapTokens = async (code: string) => {
-    console.log('@swapTokens')
+    logger.info('@swapTokens')
 
     const headers = {
         Authorization: 'Basic ' + btoa(`${env.CLIENT_ID}:${env.CLIENT_SECRET}`),
@@ -25,7 +26,7 @@ export const swapTokens = async (code: string) => {
 }
 
 export const refreshToken = async (user: User) => {
-    console.log('@refreshToken')
+    logger.info('@refreshToken')
 
     const headers = {
         Authorization: 'Basic ' + btoa(`${env.CLIENT_ID}:${env.CLIENT_SECRET}`),

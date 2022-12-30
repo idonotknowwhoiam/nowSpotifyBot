@@ -2,6 +2,7 @@ import { handleError, modifyTracksArray } from '@/bot/helpers'
 import { editInline } from '@/bot/middleware'
 import { env } from '@/config'
 import { getUser } from '@/db/helpers'
+import { logger } from '@/logger'
 import { getCurrentlyPlayed, getRecentlyPlayed } from '@/spotify/api'
 import { generateAccessLink } from '@/spotify/helpers'
 import { apiThrottler } from '@grammyjs/transformer-throttler'
@@ -39,6 +40,7 @@ bot.command('now', async (ctx) => {
 
         return ctx.reply(now.item.name)
     } catch (err: any) {
+        logger.error(err.message)
         return handleError(err.message, ctx)
     }
 })
@@ -81,21 +83,23 @@ bot.on('inline_query', async (ctx) => {
             cache_time: 1
         })
     } catch (err: any) {
+        logger.error(err.message)
         return handleError(err.message, ctx)
     }
 })
 
 bot.start()
+logger.info('Bot started')
 
 bot.catch((err) => {
     const ctx = err.ctx
-    console.error(`Error while handling update ${ctx.update.update_id}:`)
+    logger.error(`Error while handling update ${ctx.update.update_id}:`)
     const e = err.error
     if (e instanceof GrammyError) {
-        console.error('Error in request:', e.description)
+        logger.error('Error in request:', e.description)
     } else if (e instanceof HttpError) {
-        console.error('Could not contact Telegram:', e)
+        logger.error('Could not contact Telegram:', e)
     } else {
-        console.error('Unknown error:', e)
+        logger.error('Unknown error:', e)
     }
 })
