@@ -28,7 +28,7 @@ const spotifyRequest = async <T>(url: string, user: User) => {
             const updatedUser = await refreshToken(user)
 
             if ('error' in updatedUser) {
-                throw new Error('Cannot refresh token')
+                throw new Error('Cannot refresh token, try to login again.')
             }
 
             const response = (await spotifyRequest(url, updatedUser)) as T
