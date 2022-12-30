@@ -9,7 +9,7 @@
     },
     "keywords": [],
     "author": "",
-    "license": "ISC",
+    "license": "MIT",
     "dependencies": {
         "@grammyjs/transformer-throttler": "^1.2.1",
         "@ianvs/prettier-plugin-sort-imports": "^3.7.1",
