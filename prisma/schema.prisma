@@ -11,8 +11,8 @@ datasource db {
 }
 
 model User {
-    id           Int     @id @default(autoincrement())
-    userId       String  @unique
-    accessToken  String?
-    refreshToken String?
+    id           Int    @id @default(autoincrement())
+    userId       String @unique
+    accessToken  String
+    refreshToken String
 }
