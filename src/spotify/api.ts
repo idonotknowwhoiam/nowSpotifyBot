@@ -51,9 +51,9 @@ export const getCurrentlyPlayed = async (user: User) => {
     return track
 }
 
-export const getRecentlyPlayed = async (user: User) => {
+export const getRecentlyPlayed = async (user: User, limit: number) => {
     const tracks = await spotifyRequest<RecentlyTracks>(
-        `${API_URL}/me/player/recently-played?limit=1`,
+        `${API_URL}/me/player/recently-played?limit=${limit}`,
         user
     )
 
