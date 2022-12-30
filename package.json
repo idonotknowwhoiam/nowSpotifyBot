@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "description": "",
     "scripts": {
-        "dev": "tsx watch src/server/index.ts"
+        "dev": "tsx watch src/server/index.ts & tsx watch src/bot/index.ts"
     },
     "keywords": [],
     "author": "idonotknowwhoiam",
