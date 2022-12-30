@@ -1,14 +1,12 @@
 {
-    "name": "spotifytg",
+    "name": "nowspotifybot",
     "version": "1.0.0",
     "description": "",
-    "main": "index.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
         "dev": "tsx watch src/server/index.ts"
     },
     "keywords": [],
-    "author": "",
+    "author": "idonotknowwhoiam",
     "license": "MIT",
     "dependencies": {
         "@grammyjs/transformer-throttler": "^1.2.1",
