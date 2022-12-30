@@ -1,4 +1,4 @@
-import { handleError, modifyTracksArray } from '@/bot/helpers'
+import { dedupeTracks, handleError, modifyTracksArray } from '@/bot/helpers'
 import { editInline } from '@/bot/middleware'
 import { env } from '@/config'
 import { getUser } from '@/db/helpers'
@@ -51,7 +51,7 @@ bot.on('inline_query', async (ctx) => {
         if (!user)
             throw new Error('Unexpected error, please login to spotify again.')
 
-        const recentlyTracks = await getRecentlyPlayed(user)
+        const recentlyTracks = await getRecentlyPlayed(user, 2)
         if ('error' in recentlyTracks)
             throw new Error(recentlyTracks.error.message)
 
@@ -59,12 +59,11 @@ bot.on('inline_query', async (ctx) => {
         if ('error' in currentlyTrack)
             throw new Error(currentlyTrack.error.message)
 
-        const tracks = modifyTracksArray([
-            currentlyTrack.item,
-            ...recentlyTracks
-        ])
+        const tracks = dedupeTracks(
+            modifyTracksArray([currentlyTrack.item, ...recentlyTracks])
+        )
 
-        const results = tracks.map((track, i): InlineQueryResultAudio => {
+        const results = tracks.map((track): InlineQueryResultAudio => {
             return {
                 type: 'audio',
                 audio_url: 'https://example.com',

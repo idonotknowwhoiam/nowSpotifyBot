@@ -20,6 +20,26 @@ export const modifyTracksArray = (tracks: Track[]) => {
     return modifiedTracks
 }
 
+export const dedupeTracks = (tracks: modifiedTrack[]) => {
+    const uniqueUris: string[] = []
+
+    const droppedArray = tracks.filter((track) => {
+        const isDuplicate = uniqueUris.includes(track.uri)
+
+        if (!isDuplicate) {
+            uniqueUris.push(track.uri)
+
+            return true
+        }
+
+        return false
+    })
+
+    console.log(droppedArray)
+
+    return droppedArray
+}
+
 export const composeMessage = (songLinks: any, title: string) => {
     const links = streamings.reduce((accumulator, service) => {
         return songLinks[service.id]
