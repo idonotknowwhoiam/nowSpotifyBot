@@ -1,10 +1,17 @@
 import { refreshToken } from '@/spotify/auth'
-import { ApiError, CurrentlyTrack, RecentlyTracks } from '@/spotify/types'
+import {
+    ApiError,
+    CurrentlyTrack,
+    RecentlyTracks,
+    Track
+} from '@/spotify/types'
 import { User } from '@prisma/client'
 
-const API_URL = 'https://api.spotify.com/v1/me'
+const API_URL = 'https://api.spotify.com/v1'
 
 const spotifyRequest = async <T>(url: string, user: User) => {
+    console.log(`@spotifyRequest/${url}`)
+
     const responseRaw = await fetch(url, {
         method: 'GET',
         headers: {
@@ -36,7 +43,7 @@ const spotifyRequest = async <T>(url: string, user: User) => {
 
 export const getCurrentlyPlayed = async (user: User) => {
     const track = await spotifyRequest<CurrentlyTrack>(
-        `${API_URL}/player/currently-playing`,
+        `${API_URL}/me/player/currently-playing`,
         user
     )
 
@@ -45,7 +52,7 @@ export const getCurrentlyPlayed = async (user: User) => {
 
 export const getRecentlyPlayed = async (user: User) => {
     const tracks = await spotifyRequest<RecentlyTracks>(
-        `${API_URL}/player/recently-played?limit=1`,
+        `${API_URL}/me/player/recently-played?limit=1`,
         user
     )
 
@@ -54,4 +61,10 @@ export const getRecentlyPlayed = async (user: User) => {
     }
 
     return tracks.items.map((item) => item.track)
+}
+
+export const getTrack = async (user: User, id: string) => {
+    const track = await spotifyRequest<Track>(`${API_URL}/tracks/${id}`, user)
+
+    return track
 }

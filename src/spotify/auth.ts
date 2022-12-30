@@ -44,7 +44,10 @@ export const refreshToken = async (user: User) => {
 
     if ('error' in refreshedToken) return refreshedToken
 
-    const updatedUser = updateAccessToken(user.userId, user.accessToken)
+    const updatedUser = await updateAccessToken(
+        user.userId,
+        refreshedToken.access_token
+    )
 
     return updatedUser
 }

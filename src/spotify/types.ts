@@ -22,7 +22,7 @@ export type ApiError = {
     error: { status: number; message: string }
 }
 
-type Track = {
+export type Track = {
     album: object
     artists: { name: string }[]
     available_markets: string[]
