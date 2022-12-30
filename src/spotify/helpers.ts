@@ -14,3 +14,10 @@ export const generateAccessLink = (state: string) => {
 
     return url + query
 }
+
+export const splitUriToId = (uri: string) => {
+    const id = uri.split(':')[2]
+    if (!id) throw new Error()
+
+    return id
+}
