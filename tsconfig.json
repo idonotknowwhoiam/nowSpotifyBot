@@ -1,0 +1,39 @@
+{
+    "compilerOptions": {
+        "target": "ES2020", /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
+        "module": "NodeNext", /* Specify what module code is generated. */
+        "forceConsistentCasingInFileNames": true, /* Ensure that casing is correct in imports. */
+        "strict": true, /* Enable all strict type-checking options. */
+        "skipLibCheck": true, /* Skip type checking all .d.ts files. */
+        "newLine": "lf",
+        "pretty": true,
+        "sourceMap": true,
+        "noUnusedLocals": false,
+        "noUnusedParameters": false,
+        "resolveJsonModule": false,
+        "strictPropertyInitialization": false,
+        "declaration": true,
+        "noEmitOnError": true,
+        "stripInternal": true,
+        "noImplicitReturns": true,
+        "noImplicitOverride": true,
+        "useDefineForClassFields": true,
+        "noUncheckedIndexedAccess": true,
+        "noFallthroughCasesInSwitch": true,
+        "allowSyntheticDefaultImports": true,
+        "noPropertyAccessFromIndexSignature": true,
+        "lib": [
+            "dom"
+        ],
+        "outDir": "dist",
+        "baseUrl": ".",
+        "paths": {
+            "@/*": [
+                "src/*"
+            ]
+        }
+    },
+    "include": [
+        "src/**/*"
+    ],
+}
