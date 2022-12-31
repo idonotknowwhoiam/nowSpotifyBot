@@ -1,4 +1,5 @@
 import { modifiedTrack } from '@/bot/types'
+import { logger } from '@/logger'
 import { Track } from '@/spotify/types'
 import { Context } from 'grammy'
 
@@ -33,6 +34,7 @@ export const dedupeTracks = (tracks: modifiedTrack[]) => {
             return true
         }
 
+        logger.trace('The duplicate was found and deleted.')
         return false
     })
 
