@@ -7,7 +7,7 @@ import { User } from '@prisma/client'
 const AUTH_URL = 'https://accounts.spotify.com/api/token'
 
 export const swapTokens = async (code: string) => {
-    logger.info('@swapTokens')
+    logger.debug('@swapTokens')
 
     const headers = {
         Authorization: 'Basic ' + btoa(`${env.CLIENT_ID}:${env.CLIENT_SECRET}`),
@@ -26,7 +26,7 @@ export const swapTokens = async (code: string) => {
 }
 
 export const refreshToken = async (user: User) => {
-    logger.info('@refreshToken')
+    logger.debug('@refreshToken')
 
     const headers = {
         Authorization: 'Basic ' + btoa(`${env.CLIENT_ID}:${env.CLIENT_SECRET}`),
