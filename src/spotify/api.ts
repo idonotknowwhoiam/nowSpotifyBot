@@ -11,7 +11,7 @@ import { User } from '@prisma/client'
 const API_URL = 'https://api.spotify.com/v1'
 
 const spotifyRequest = async <T>(url: string, user: User) => {
-    logger.info(`@spotifyRequest/${url}`)
+    logger.info(`@spotifyRequest/${url} from ${user.userId}`)
 
     const responseRaw = await fetch(url, {
         method: 'GET',
