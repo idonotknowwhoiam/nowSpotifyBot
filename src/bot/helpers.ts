@@ -35,8 +35,6 @@ export const dedupeTracks = (tracks: modifiedTrack[]) => {
         return false
     })
 
-    console.log(droppedArray)
-
     return droppedArray
 }
 

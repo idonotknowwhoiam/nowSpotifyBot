@@ -19,7 +19,7 @@ export const env = cleanEnv(process.env, {
             'trace',
             'silent'
         ],
-        default: 'info'
+        default: 'debug'
     }),
     API: str(),
     scope: str(),

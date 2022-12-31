@@ -1,14 +1,10 @@
 import { env } from '@/config'
 import pino, { destination, Logger, LoggerOptions } from 'pino'
 
-const options: LoggerOptions = {
-    level: env.LOG_LEVEL
-}
-
 const transport = pino.transport({
     targets: [
         {
-            level: env.NODE_ENV === 'production' ? 'silent' : 'info',
+            level: env.NODE_ENV === 'production' ? 'silent' : env.LOG_LEVEL,
             target: 'pino-pretty',
             options: {}
         },
