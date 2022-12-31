@@ -10,11 +10,12 @@ const streamings = [
 ]
 
 export const modifyTracksArray = (tracks: Track[]) => {
-    const modifiedTracks: modifiedTrack[] = tracks.map((track) => {
+    const modifiedTracks = tracks.map((track) => {
         return {
-            title: `${track.artists[0]?.name} - ${track.name}`,
+            title: track.name,
+            performer: track.artists[0]?.name,
             uri: track.uri
-        }
+        } as modifiedTrack
     })
 
     return modifiedTracks

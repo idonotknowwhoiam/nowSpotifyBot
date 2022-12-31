@@ -71,6 +71,7 @@ bot.on('inline_query', async (ctx) => {
                 audio_url: 'https://example.com',
                 id: track.uri,
                 title: track.title,
+                performer: track.performer,
                 input_message_content: {
                     message_text: track.title,
                     parse_mode: 'HTML',
@@ -81,7 +82,7 @@ bot.on('inline_query', async (ctx) => {
         })
 
         return await ctx.answerInlineQuery(results, {
-            cache_time: 1
+            cache_time: 0
         })
     } catch (err: any) {
         logger.error(err.message)
