@@ -56,12 +56,14 @@ bot.on('inline_query', async (ctx) => {
             throw new Error(recentlyTracks.error.message)
 
         const currentlyTrack = await await getCurrentlyPlayed(user)
-        if ('error' in currentlyTrack)
-            throw new Error(currentlyTrack.error.message)
 
-        const tracks = dedupeTracks(
-            modifyTracksArray([currentlyTrack.item, ...recentlyTracks])
-        )
+        const isCurrentlyTrackExists = 'item' in currentlyTrack
+
+        const tracks = isCurrentlyTrackExists
+            ? dedupeTracks(
+                  modifyTracksArray([currentlyTrack.item, ...recentlyTracks])
+              )
+            : dedupeTracks(modifyTracksArray(recentlyTracks))
 
         const results = tracks.map((track): InlineQueryResultAudio => {
             return {

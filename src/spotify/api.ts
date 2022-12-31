@@ -21,6 +21,9 @@ const spotifyRequest = async <T>(url: string, user: User) => {
         }
     })
 
+    if (responseRaw.status === 204)
+        throw new Error(`There aren't any data, status ${responseRaw.status}`)
+
     const response = (await responseRaw.json()) as T | ApiError
 
     // @ts-ignore
@@ -46,7 +49,15 @@ export const getCurrentlyPlayed = async (user: User) => {
     const track = await spotifyRequest<CurrentlyTrack>(
         `${API_URL}/me/player/currently-playing`,
         user
-    )
+    ).catch((err: Error) => {
+        logger.error(`getCurrentlyPlayed, ${err.message}`)
+        return {
+            error: {
+                status: 204,
+                message: "You're not playing music right now."
+            }
+        } as ApiError
+    })
 
     return track
 }
