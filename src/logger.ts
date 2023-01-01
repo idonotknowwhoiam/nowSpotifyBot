@@ -1,19 +1,25 @@
 import { env } from '@/config'
-import pino, { destination, Logger, LoggerOptions } from 'pino'
+import pino from 'pino'
+
+const isProd = env.NODE_ENV === 'production'
 
 const transport = pino.transport({
     targets: [
         {
-            level: env.NODE_ENV === 'production' ? 'info' : env.LOG_LEVEL,
+            level: isProd ? 'info' : 'trace',
             target: 'pino-pretty',
-            options: {}
+            options: {
+                ignore: 'pid,hostname',
+                colorize: true,
+                minimumLevel: 'trace'
+            }
         },
         {
-            level: env.NODE_ENV === 'production' ? 'trace' : 'silent',
+            level: isProd ? 'info' : 'silent',
             target: 'pino/file',
             options: { destination: 'logs/log', mkdir: true }
         }
     ]
 })
 
-export const logger = pino(transport)
+export const logger = pino({ level: isProd ? 'info' : 'trace' }, transport)

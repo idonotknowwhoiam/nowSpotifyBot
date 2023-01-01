@@ -15,22 +15,25 @@ server.get<{ Querystring: IQuerystring }>('/callback', async (request) => {
 
     if ('access_token' in credentials) {
         try {
-            await createUser(
+            const user = await createUser(
                 request.query.state,
                 credentials.access_token,
                 credentials.refresh_token
             )
 
-            server.log.info('User with access token created')
+            logger.info(`User ${user.userId} with access token created`)
 
-            return 'Access token successfully linked'
+            return 'Access token successfully linked, back to bot'
         } catch (err) {
-            server.log.error('Error while creating user', err)
+            logger.error('Error while creating user', err)
             return 'Error while creating user'
         }
     }
 
-    server.log.error('Access token invalid', credentials.error_description)
+    logger.error(
+        `Access token invalid for ${request.query.state}`,
+        credentials.error_description
+    )
 
     return credentials.error_description
 })
@@ -43,7 +46,7 @@ const start = async () => {
         const port = typeof address === 'string' ? address : address?.port
         logger.info(`Server started on ${port} port`)
     } catch (err) {
-        server.log.error(err)
+        logger.error(err)
         process.exit(1)
     }
 }
