@@ -34,7 +34,7 @@ export const dedupeTracks = (tracks: modifiedTrack[]) => {
             return true
         }
 
-        logger.trace('The duplicate was found and deleted.')
+        logger.trace('Duplicate was found and deleted.')
         return false
     })
 
@@ -45,9 +45,7 @@ export const composeMessage = (songLinks: any, title: string) => {
     const links = streamings.reduce((accumulator, service) => {
         return songLinks[service.id]
             ? accumulator +
-                  `<a href="${songLinks[service.id].url}">${
-                      service.title
-                  }</a>` +
+                  `<a href="${songLinks[service.id].url}">${service.title}</a>` +
                   '  '
             : accumulator
     }, '')

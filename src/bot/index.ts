@@ -15,16 +15,16 @@ export const bot = new Bot(env.TELEGRAM_SECRET)
 bot.api.config.use(throttler)
 bot.use(editInline)
 
-const inlineKeyboard = new InlineKeyboard().text('Loading...', 'loading')
+const loader = new InlineKeyboard().text('Loading...', 'loading')
 
 bot.command(['start', 'login'], async (ctx) => {
     if (!ctx.from) throw new Error()
 
     const accessLink = generateAccessLink(ctx.from?.id.toString())
-    ctx.reply(
-        'Hi, to use bot you need to authorize it in Spotify. Follow the link. \n\n' +
-            accessLink
-    )
+
+    ctx.reply('Hi, to use bot you need to authorize it in Spotify.', {
+        reply_markup: new InlineKeyboard().url('Login to Spotify', accessLink)
+    })
 })
 
 bot.command('now', async (ctx) => {
@@ -72,7 +72,7 @@ bot.on('inline_query', async (ctx) => {
                     parse_mode: 'HTML',
                     disable_web_page_preview: true
                 },
-                reply_markup: inlineKeyboard
+                reply_markup: loader
             }
         })
 
