@@ -58,3 +58,23 @@ ${links}
 
 export const handleError = (message: string | undefined, ctx: Context) =>
     ctx.reply(message ?? 'Unexpected error, try again.')
+
+export const inlineLoginError = async (ctx: Context) => {
+    return await ctx.answerInlineQuery(
+        [
+            {
+                type: 'article',
+                id: 'error',
+                title: 'Error',
+                input_message_content: {
+                    message_text: `You need to login in Spotify.`,
+                    disable_web_page_preview: true
+                },
+                description: 'You need to login in Spotify.'
+            }
+        ],
+        {
+            cache_time: 5
+        }
+    )
+}
