@@ -32,8 +32,7 @@ bot.command('now', async (ctx) => {
         if (!ctx.from) throw new Error()
 
         const user = await getUser(ctx.from?.id)
-        if (!user)
-            throw new Error('Unexpected error, please login to spotify again.')
+        if (!user) throw new Error('Unexpected error, please login to spotify again.')
 
         const now = await getCurrentlyPlayed(user)
         if ('error' in now) throw new Error(now.error.message)
@@ -48,21 +47,17 @@ bot.command('now', async (ctx) => {
 bot.on('inline_query', async (ctx) => {
     try {
         const user = await getUser(ctx.from?.id)
-        if (!user)
-            throw new Error('Unexpected error, please login to spotify again.')
+        if (!user) throw new Error('Unexpected error, please login to spotify again.')
 
         const recentlyTracks = await getRecentlyPlayed(user, 2)
-        if ('error' in recentlyTracks)
-            throw new Error(recentlyTracks.error.message)
+        if ('error' in recentlyTracks) throw new Error(recentlyTracks.error.message)
 
         const currentlyTrack = await await getCurrentlyPlayed(user)
 
         const isCurrentlyTrackExists = 'item' in currentlyTrack
 
         const tracks = isCurrentlyTrackExists
-            ? dedupeTracks(
-                  modifyTracksArray([currentlyTrack.item, ...recentlyTracks])
-              )
+            ? dedupeTracks(modifyTracksArray([currentlyTrack.item, ...recentlyTracks]))
             : dedupeTracks(modifyTracksArray(recentlyTracks))
 
         const results = tracks.map((track): InlineQueryResultAudio => {
@@ -73,7 +68,7 @@ bot.on('inline_query', async (ctx) => {
                 title: track.title,
                 performer: track.performer,
                 input_message_content: {
-                    message_text: track.title,
+                    message_text: `${track.performer} - ${track.title}`,
                     parse_mode: 'HTML',
                     disable_web_page_preview: true
                 },
