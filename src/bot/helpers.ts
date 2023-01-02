@@ -56,10 +56,18 @@ ${links}
     `
 }
 
-export const handleError = (message: string | undefined, ctx: Context) =>
-    ctx.reply(message ?? 'Unexpected error, try again.')
+export const handleError = (
+    message: string | undefined = 'Unexpected Error',
+    ctx: Context
+) => {
+    if (ctx.inlineQuery) {
+        return inlineError(message, ctx)
+    }
 
-export const inlineLoginError = async (ctx: Context) => {
+    return ctx.reply(message)
+}
+
+export const inlineError = async (message: string, ctx: Context) => {
     return await ctx.answerInlineQuery(
         [
             {
@@ -67,10 +75,10 @@ export const inlineLoginError = async (ctx: Context) => {
                 id: 'error',
                 title: 'Error',
                 input_message_content: {
-                    message_text: `You need to login in Spotify.`,
+                    message_text: message,
                     disable_web_page_preview: true
                 },
-                description: 'You need to login in Spotify.'
+                description: message
             }
         ],
         {

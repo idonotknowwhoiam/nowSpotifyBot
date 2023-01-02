@@ -1,11 +1,6 @@
 import { logger } from '@/logger'
 import { refreshToken } from '@/spotify/auth'
-import {
-    ApiError,
-    CurrentlyTrack,
-    RecentlyTracks,
-    Track
-} from '@/spotify/types'
+import { ApiError, CurrentlyTrack, RecentlyTracks, Track } from '@/spotify/types'
 import { User } from '@prisma/client'
 
 const API_URL = 'https://api.spotify.com/v1'
@@ -21,8 +16,14 @@ const spotifyRequest = async <T>(url: string, user: User) => {
         }
     })
 
-    if (responseRaw.status === 204)
-        throw new Error(`There aren't any data, status ${responseRaw.status}`)
+    if (responseRaw.status === 204) {
+        return {
+            error: {
+                status: 204,
+                message: "You're not playing music right now."
+            }
+        } as ApiError
+    }
 
     const response = (await responseRaw.json()) as T | ApiError
 
@@ -32,7 +33,7 @@ const spotifyRequest = async <T>(url: string, user: User) => {
             const updatedUser = await refreshToken(user)
 
             if ('error' in updatedUser) {
-                throw new Error('Cannot refresh token, try to login again.')
+                throw new Error('Cannot refresh Spotify auth, try to login again.')
             }
 
             const response = (await spotifyRequest(url, updatedUser)) as T
@@ -49,15 +50,7 @@ export const getCurrentlyPlayed = async (user: User) => {
     const track = await spotifyRequest<CurrentlyTrack>(
         `${API_URL}/me/player/currently-playing`,
         user
-    ).catch((err: Error) => {
-        logger.error(`getCurrentlyPlayed, ${err.message}`)
-        return {
-            error: {
-                status: 204,
-                message: "You're not playing music right now."
-            }
-        } as ApiError
-    })
+    )
 
     return track
 }

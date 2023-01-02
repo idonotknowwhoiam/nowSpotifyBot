@@ -8,7 +8,6 @@ import { generateAccessLink } from '@/spotify/helpers'
 import { apiThrottler } from '@grammyjs/transformer-throttler'
 import { Bot, GrammyError, HttpError, InlineKeyboard } from 'grammy'
 import { InlineQueryResultAudio } from 'grammy/types'
-import { inlineLoginError } from './helpers'
 
 const throttler = apiThrottler()
 
@@ -33,12 +32,12 @@ bot.command('now', async (ctx) => {
         if (!ctx.from) throw new Error()
 
         const user = await getUser(ctx.from?.id)
-        if (!user) throw new Error('You need to login in Spotify.')
+        if (!user) return handleError('You are not logged in Spotify.', ctx)
 
         const now = await getCurrentlyPlayed(user)
-        if ('error' in now) throw new Error(now.error.message)
+        if ('error' in now) return handleError(now.error.message, ctx)
 
-        return ctx.reply(now.item.name)
+        return ctx.reply(`${now.item.artists[0]?.name} - ${now.item.name}`)
     } catch (err: any) {
         logger.error(err.message)
         return handleError(err.message, ctx)
@@ -48,10 +47,11 @@ bot.command('now', async (ctx) => {
 bot.on('inline_query', async (ctx) => {
     try {
         const user = await getUser(ctx.from?.id)
-        if (!user) return inlineLoginError(ctx)
+        if (!user) return handleError('You are not logged in Spotify.', ctx)
 
         const recentlyTracks = await getRecentlyPlayed(user, 2)
-        if ('error' in recentlyTracks) throw new Error(recentlyTracks.error.message)
+        if ('error' in recentlyTracks)
+            return handleError(recentlyTracks.error.message, ctx)
 
         const currentlyTrack = await await getCurrentlyPlayed(user)
 
