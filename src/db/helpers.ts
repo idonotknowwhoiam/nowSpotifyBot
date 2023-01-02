@@ -1,6 +1,4 @@
-import { PrismaClient } from '@prisma/client'
-
-const prisma = new PrismaClient()
+import { prisma } from './prisma'
 
 export const createUser = async (
     userId: string,
@@ -25,10 +23,7 @@ export const createUser = async (
     })
 }
 
-export const updateAccessToken = async (
-    userId: string,
-    accessToken: string
-) => {
+export const updateAccessToken = async (userId: string, accessToken: string) => {
     return await prisma.user.update({
         where: {
             userId
