@@ -5,6 +5,7 @@ import { getUser } from '@/db/helpers'
 import { logger } from '@/logger'
 import { getCurrentlyPlayed, getRecentlyPlayed } from '@/spotify/api'
 import { generateAccessLink } from '@/spotify/helpers'
+import { autoRetry } from '@grammyjs/auto-retry'
 import { apiThrottler } from '@grammyjs/transformer-throttler'
 import { Bot, GrammyError, HttpError, InlineKeyboard } from 'grammy'
 import { InlineQueryResultAudio } from 'grammy/types'
@@ -13,6 +14,7 @@ const throttler = apiThrottler()
 
 export const bot = new Bot(env.TELEGRAM_SECRET)
 bot.api.config.use(throttler)
+bot.api.config.use(autoRetry())
 bot.use(editInline)
 
 const loader = new InlineKeyboard().text('Loading...', 'loading')
@@ -53,7 +55,7 @@ bot.on('inline_query', async (ctx) => {
         if ('error' in recentlyTracks)
             return handleError(recentlyTracks.error.message, ctx)
 
-        const currentlyTrack = await await getCurrentlyPlayed(user)
+        const currentlyTrack = await getCurrentlyPlayed(user)
 
         const isCurrentlyTrackExists = 'item' in currentlyTrack
 
@@ -101,3 +103,4 @@ bot.catch((err) => {
         logger.error('Unknown error:', e)
     }
 })
+
